@@ -70,3 +70,4 @@ export function WeatherIcon({ iconCode = '01d', conditionGroup = '', className =
 
   return <Wind className={`${className} text-zinc-400`} />;
 }
+

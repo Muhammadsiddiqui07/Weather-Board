@@ -59,3 +59,4 @@ export const useWeatherStore = create(
     }
   )
 );
+

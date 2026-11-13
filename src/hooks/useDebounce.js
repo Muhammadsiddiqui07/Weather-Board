@@ -20,3 +20,4 @@ export function useDebounce(value, delay = APP_CONFIG.DEBOUNCE_DELAY_MS) {
 
   return debouncedValue;
 }
+

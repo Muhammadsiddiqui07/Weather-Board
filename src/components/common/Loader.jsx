@@ -22,3 +22,4 @@ export function Loader({ size = 'md', text, className = '' }) {
     </div>
   );
 }
+

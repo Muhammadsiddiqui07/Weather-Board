@@ -77,3 +77,4 @@ export function FavouritesPanel({ selectedCity, onSelectCity }) {
     </section>
   );
 }
+

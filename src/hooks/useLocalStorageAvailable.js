@@ -39,3 +39,4 @@ export function useLocalStorageAvailable() {
 
   return available;
 }
+

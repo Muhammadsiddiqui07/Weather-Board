@@ -125,3 +125,4 @@ export function useCitySearch() {
     retrySearch: () => fetchSuggestions(query.trim()),
   };
 }
+

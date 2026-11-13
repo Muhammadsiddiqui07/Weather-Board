@@ -80,3 +80,4 @@ export async function searchCities(query, signal) {
   // Graceful fallback when no RapidAPI key is configured
   return searchCitiesFallback(trimmed, signal);
 }
+

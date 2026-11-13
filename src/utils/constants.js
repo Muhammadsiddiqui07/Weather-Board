@@ -32,3 +32,4 @@ export const WEATHER_SOURCES = {
   OPENWEATHER: 'OpenWeatherMap',
   OPEN_METEO: 'Open-Meteo (Fallback)',
 };
+

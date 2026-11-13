@@ -40,3 +40,4 @@ export function validateCityInput(query) {
     message: null,
   };
 }
+

@@ -60,3 +60,4 @@ export function useWeather() {
     refetch: () => fetchWeatherData(selectedCity),
   };
 }
+

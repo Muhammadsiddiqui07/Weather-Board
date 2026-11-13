@@ -40,3 +40,4 @@ export function FavouriteItem({ city, isSelected = false, onSelect, onRequestRem
     </div>
   );
 }
+

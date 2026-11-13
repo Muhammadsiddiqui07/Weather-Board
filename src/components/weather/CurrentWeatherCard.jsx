@@ -97,3 +97,4 @@ export function CurrentWeatherCard({ data, onToggleFavourite, isFavourite }) {
     </article>
   );
 }
+

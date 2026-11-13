@@ -132,3 +132,4 @@ export function CitySearch({ onSelectCity }) {
     </div>
   );
 }
+

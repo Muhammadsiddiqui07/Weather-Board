@@ -56,3 +56,4 @@ export function formatTime(timestamp) {
     minute: '2-digit',
   }).format(date);
 }
+

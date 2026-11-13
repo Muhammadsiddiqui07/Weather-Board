@@ -24,3 +24,4 @@ export function ForecastList({ forecast = [] }) {
     </section>
   );
 }
+
