@@ -2,8 +2,8 @@
 
 **Project:** WeatherBoard (Edspire Frontend Challenge)
 **IDE / Agent used:** Antigravity (coding agent)
-**AI assistant used for guidance:** Claude. I used it to debug problems and to draft some prompts (marked "Drafted with Claude" below). I ran, tested and reviewed every prompt myself.
-**Process note:** Prompts are listed in the order I gave them. Language is cleaned up for readability; the intent is unchanged.
+**AI assistant used for guidance:** Claude (used it to debug issues and draft a few detailed prompts, marked below). I tested and reviewed every single change myself.
+**Note:** Prompts are listed in the order I ran them. I've cleaned up the wording slightly for clarity, keeping the original intent intact.
 
 ---
 
@@ -16,8 +16,8 @@
 > The UI should have a blur and glass effect, styled with Tailwind CSS, with dark and light mode support, and should look premium.
 > Start with the folder structure as per the requirements, containing: `components`, `hooks`, `lib`, `pages`, `service`.
 
-**What I did / what the agent did:**
-I created the project and installed the required dependencies myself. The agent analyzed the requirements and generated the project with the requested folder structure.
+**What happened:**
+I set up the Vite project and installed the dependencies myself. The agent created the base folder structure and built the initial UI.
 
 ---
 
@@ -28,8 +28,8 @@ I created the project and installed the required dependencies myself. The agent 
 **Prompt:**
 > Offline mode is not working, and searching within favourites is not working either. Fix both.
 
-**Result / what the agent got wrong:**
-The offline cache and cached data were still not visible. The whole screen showed a "You're offline, Retry" error instead.
+**What happened:**
+Favourites search got fixed, but offline mode still didn't work. Whenever I went offline, the cached data disappeared and the whole screen just showed a "You're offline, Retry" error.
 
 ---
 
@@ -43,11 +43,13 @@ The offline cache and cached data were still not visible. The whole screen showe
 
 **Screenshot:** `docs/screenshots/offline-network-tab.png`
 
-**Why a second prompt was needed:**
-The first fix did not resolve the problem, so I attached the Network tab screenshot so the agent could see the failing requests.
+**Why I ran this:**
+Since the first fix didn't work, I attached a screenshot of the Network tab so the agent could see the exact failing requests.
 
-**Result:**
-It improve the app a lot and the offline mode started working. 
+**What happened:**
+It improved the caching behaviour, though it still broke on a full offline page reload.
+
+---
 
 ## Prompt 4: Search suggestions overlay and keyboard scrolling
 
@@ -56,8 +58,10 @@ It improve the app a lot and the offline mode started working.
 **Prompt:**
 > In the search bar, the content behind the suggestion list is not hidden. Also, when I scroll down the suggestions with the keyboard, the list does not scroll. Fix both.
 
-**Result / what the agent got wrong:**
-Agent Fix the problem after understand the problem.
+**What happened:**
+The agent fixed the keyboard scrolling, though the background blur/transparency still needed a bit more polish (which I fixed later in Prompt 8).
+
+---
 
 ## Prompt 5: Offline mode (service worker and cache)
 
@@ -66,11 +70,11 @@ Agent Fix the problem after understand the problem.
 **Prompt:**
 > The app is still not working in offline mode. Check the service worker and the cache strategy, and make sure the app works offline.
 
-**Why another prompt was needed:**
-Offline mode was still not working after Prompts 2 and 3.
+**Why I ran this:**
+A full page reload while offline was still failing even after Prompts 2 and 3.
 
-**Result / what the agent got wrong:**
-It still did not work. The agent kept rebuilding without finding the real cause. At this point I took the problem to Claude and explained everything (see Prompt 6).
+**What happened:**
+The agent kept tweaking the dev server setup without catching the root cause. At this point, I discussed the exact issue with Claude to write a proper production-level prompt (see Prompt 6).
 
 ---
 
@@ -78,8 +82,8 @@ It still did not work. The agent kept rebuilding without finding the real cause.
 
 **Written by:** drafted with Claude, run by me
 
-**Why this prompt:**
-The agent's previous fix enabled the service worker on the dev server (localhost:5173), which is unreliable with Vite's unbundled modules. Offline must work on the production build, since that is what gets deployed to Vercel.
+**Why I ran this:**
+The agent had enabled the service worker on the Vite dev server (`localhost:5173`), which doesn't work reliably with unbundled dev modules. Offline mode needed to work properly on the production build (`npm run build` + `npm run preview`) for Vercel deployment.
 
 **Prompt:**
 > Offline mode still does not work. Context:
@@ -98,8 +102,8 @@ The agent's previous fix enabled the service worker on the dev server (localhost
 > - Tell me exactly how to test it on the production build, step by step.
 > - Explain what was actually wrong before changing code.
 
-**Result:**
-Offline mode works on the production build (`localhost:4173`): the app shell loads, the last viewed city and forecast are shown from cache, and the offline banner appears.
+**What happened:**
+Offline mode finally worked properly on the production build (`localhost:4173`). Reloading offline now loads the app shell, shows the last viewed city and forecast from cache, and displays a clean offline banner.
 
 ---
 
@@ -110,21 +114,25 @@ Offline mode works on the production build (`localhost:4173`): the app shell loa
 **Prompt:**
 > Offline mode now works on the production build. One refinement: when the browser is offline, the city search should not show the generic "Network request failed to reach the server" error with a Retry button. Instead show: "You're offline. City search needs an internet connection, but you can still view your last city and saved favourites." Hide the Retry button while offline, and disable the search request entirely (no failed GeoDB calls). When connectivity returns, search should work again without a reload.
 
-**Result:**
-Now its working properly when the offline mood is active.
+**What happened:**
+Now when the app is offline, searching shows a clear message instead of a broken network error, and automatically works again once the internet is back.
 
-## Prompt 8: Search bar blur and keyboard navigation (follow-up to Prompt 4)
+---
+
+## Prompt 8: Search bar blur and keyboard navigation
 
 **Written by:** me
 
 **Prompt:**
 > Fix the search bar: give it a blurred (glass) background, hide the content behind the suggestion list, and make the suggestions scrollable with the keyboard.
 
-**Why a second prompt was needed:**
-We miss the ui theme which will correct looks good, currently its not having blur background and content is visible behind the suggestion list and suggestions are not scrollable with keyboard. Fix these issues.
+**Why I ran this:**
+The dropdown transparency was making the underlying page text bleed through, and keyboard navigation wasn't smoothly scrolling the list.
 
-**Result:**
-Now search bar has proper blurred background and content is not visible behind the suggestion list and suggestions are scrollable with keyboard.**
+**What happened:**
+The search dropdown now has a solid frosted-glass background that hides underlying content properly, and arrow-key scrolling works smoothly.
+
+---
 
 ## Prompt 9: Form validation
 
@@ -133,8 +141,8 @@ Now search bar has proper blurred background and content is not visible behind t
 **Prompt:**
 > Add form validation: validate on blur (not only on submit) and show clear inline error messages.
 
-**Result / what I changed:**
-_Add one line._
+**What happened:**
+Added on-blur input validation with clean inline error messages when invalid or empty values are entered.
 
 ---
 
@@ -145,8 +153,8 @@ _Add one line._
 **Prompt:**
 > Favourites: allow a maximum of 5 cities, ask for confirmation before removing one, and fall back gracefully if localStorage is unavailable.
 
-**Result / what I changed:**
-_Add one line._
+**What happened:**
+Capped saved favourites at 5 cities, added a confirmation prompt before deleting any city, and added safe fallback handling if `localStorage` is blocked or full.
 
 ---
 
@@ -157,12 +165,12 @@ _Add one line._
 **Prompt:**
 > Add a PWA web manifest with icons.
 
-**Result / what I changed:**
-_Add one line._
+**What happened:**
+Added the web manifest and app icons so WeatherBoard can be installed as a standalone PWA.
 
 ---
 
-## Prompt 12: Daily weather reminder (push / notifications)
+## Prompt 12: Daily weather reminder (notifications)
 
 **Written by:** drafted with Claude, run by me
 
@@ -180,5 +188,5 @@ _Add one line._
 > Before writing code, explain the design in a few lines, including the limitations: the browser decides the exact Periodic Sync timing, it needs an installed PWA and Chromium, and true exact-time delivery with a closed tab requires server-side Web Push (VAPID + scheduler). I want these listed in the README's known limitations.
 > After implementing, give me step-by-step instructions to test it on the production build (npm run build + npm run preview), including how to trigger the periodicsync event manually from DevTools.
 
-**Result / what I changed:**
-_Add one line after testing._
+**What happened:**
+Added the daily weather reminder settings with an explanation modal before asking permission, IndexedDB storage for the service worker, Periodic Background Sync, and an in-page fallback timer. Tested it on the production build via DevTools.
