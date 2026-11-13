@@ -7,26 +7,86 @@
   }
 
   body {
-    @apply bg-zinc-950 text-zinc-100 min-h-screen antialiased;
+    background-color: #07090e;
+    color: #f4f4f5;
+    min-height: 100vh;
     font-family: var(--font-sans);
+    /*
+     * overflow-x: clip stops horizontal scrollbar without creating a stacking
+     * context. overflow-x: hidden would clip absolutely-positioned dropdowns.
+     */
+    overflow-x: clip;
   }
 }
 
-/* Custom scrollbar for sleek dashboard appearance */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* ─── Glassmorphism utilities ─────────────────────────────────────────────── */
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
 }
 
-::-webkit-scrollbar-track {
-  background: #09090b;
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 9999px;
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.45);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+.glass-input {
+  background: rgba(18, 20, 29, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.4);
 }
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+/* ─── Ambient glow orb animations ────────────────────────────────────────── */
+
+@keyframes orb-float-1 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50%       { transform: translate(40px, -30px) scale(1.1); }
+}
+@keyframes orb-float-2 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50%       { transform: translate(-30px, 35px) scale(1.15); }
+}
+@keyframes orb-float-3 {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50%       { transform: translate(25px, 20px) scale(0.95); }
+}
+
+.animate-orb-1 { animation: orb-float-1 18s ease-in-out infinite; }
+.animate-orb-2 { animation: orb-float-2 22s ease-in-out infinite; }
+.animate-orb-3 { animation: orb-float-3 25s ease-in-out infinite; }
+
+/* ─── Custom sleek scrollbar ──────────────────────────────────────────────── */
+
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }

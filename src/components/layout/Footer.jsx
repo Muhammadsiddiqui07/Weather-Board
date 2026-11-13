@@ -11,7 +11,6 @@ export function Footer() {
         <div>
           <span>WeatherBoard</span>
           <span className="mx-2">•</span>
-          <span>Phase 1 Architecture</span>
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-zinc-400">

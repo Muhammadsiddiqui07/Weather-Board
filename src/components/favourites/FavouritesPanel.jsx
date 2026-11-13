@@ -1,5 +1,8 @@
 /**
- * Favourites panel with quick access chips, limit indicators, and confirmation dialog.
+ * Glassmorphic Favourites panel — quick-access chips for up to 5 saved cities.
+ *
+ * Fix: FavouriteItem.onSelect propagates directly to Dashboard.handleSelectCity
+ * which uses the null→set trick to force useWeather to re-fetch even on same city.
  */
 
 import React, { useState } from 'react';
@@ -16,21 +19,22 @@ export function FavouritesPanel({ selectedCity, onSelectCity }) {
   if (favourites.length === 0 && !limitReachedMessage) return null;
 
   return (
-    <section aria-label="Favourite Cities" className="w-full my-4 space-y-3">
-      <div className="flex items-center justify-between text-xs text-zinc-400">
-        <div className="flex items-center gap-1.5 font-medium">
+    <section aria-label="Favourite Cities" className="w-full space-y-3">
+      <div className="flex items-center justify-between text-xs text-zinc-300">
+        <div className="flex items-center gap-1.5 font-semibold">
           <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
           <span>Favourites</span>
         </div>
-        <span className="font-mono text-[11px] text-zinc-500">
+        <span className="font-mono text-[11px] text-zinc-400">
           {favourites.length} / {APP_CONFIG.MAX_FAVOURITES} saved
         </span>
       </div>
 
+      {/* Limit warning banner */}
       {limitReachedMessage && (
         <div
           role="alert"
-          className="w-full bg-amber-950/30 border border-amber-800/50 rounded-xl p-3 flex items-start justify-between gap-2 text-xs text-amber-300"
+          className="w-full glass-card rounded-xl px-4 py-3 flex items-start justify-between gap-2 text-xs text-amber-200 bg-amber-950/30 border-amber-700/40"
         >
           <div className="flex items-start gap-2">
             <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
@@ -39,21 +43,25 @@ export function FavouritesPanel({ selectedCity, onSelectCity }) {
           <button
             type="button"
             onClick={clearLimitMessage}
-            aria-label="Dismiss message"
-            className="text-amber-400/80 hover:text-amber-200 cursor-pointer p-0.5"
+            aria-label="Dismiss"
+            className="text-amber-300 hover:text-white cursor-pointer p-0.5 shrink-0"
           >
             <X className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
 
+      {/* Favourite city chips */}
       {favourites.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
           {favourites.map((fav) => (
             <FavouriteItem
               key={fav.id || fav.name}
               city={fav}
-              isSelected={selectedCity?.name?.toLowerCase() === fav.name.toLowerCase()}
+              isSelected={
+                selectedCity?.name?.toLowerCase() === fav.name.toLowerCase() &&
+                (!selectedCity.countryCode || selectedCity.countryCode === fav.countryCode)
+              }
               onSelect={onSelectCity}
               onRequestRemove={(city) => setCityToRemove(city)}
             />
@@ -61,10 +69,11 @@ export function FavouritesPanel({ selectedCity, onSelectCity }) {
         </div>
       )}
 
+      {/* Removal confirmation dialog */}
       <ConfirmDialog
         isOpen={Boolean(cityToRemove)}
         title="Remove Favourite"
-        message={`Remove "${cityToRemove?.name}" from your quick-access favourites list?`}
+        message={`Remove "${cityToRemove?.name}" from your quick-access favourites?`}
         confirmText="Remove City"
         onConfirm={() => {
           if (cityToRemove) {
@@ -77,4 +86,3 @@ export function FavouritesPanel({ selectedCity, onSelectCity }) {
     </section>
   );
 }
-
