@@ -5,7 +5,7 @@
  * flow wrapper with no overflow restrictions.
  */
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useWeatherStore } from '../store/weatherStore';
 import { useFavouritesStore } from '../store/favouritesStore';
 import { useWeather } from '../hooks/useWeather';
@@ -16,11 +16,31 @@ import { ForecastList } from '../components/weather/ForecastList';
 import { CurrentWeatherSkeleton, ForecastSkeleton } from '../components/common/Skeletons';
 import { ErrorMessage } from '../components/common/ErrorMessage';
 import { EmptyState } from '../components/common/EmptyState';
+import { saveLastViewedSnapshot } from '../utils/reminderDb';
 
 export function Dashboard() {
   const { selectedCity, setSelectedCity } = useWeatherStore();
   const { favourites, addFavourite, removeFavourite } = useFavouritesStore();
   const { weatherData, isLoading, error, refetch } = useWeather();
+
+  useEffect(() => {
+    if (!selectedCity) return;
+
+    const weatherCity = weatherData?.city;
+    const sameCoordinates =
+      Number.isFinite(Number(selectedCity.latitude)) &&
+      Number.isFinite(Number(selectedCity.longitude)) &&
+      Number(selectedCity.latitude) === Number(weatherCity?.latitude) &&
+      Number(selectedCity.longitude) === Number(weatherCity?.longitude);
+    const sameName =
+      selectedCity.name?.trim().toLowerCase() === weatherCity?.name?.trim().toLowerCase() &&
+      (selectedCity.countryCode || '') === (weatherCity?.countryCode || '');
+    const matchingWeather = sameCoordinates || sameName ? weatherData : null;
+
+    saveLastViewedSnapshot(selectedCity, matchingWeather).catch((storageError) => {
+      console.error('Could not save last-viewed weather for reminders:', storageError);
+    });
+  }, [selectedCity, weatherData]);
 
   // Reactive isFavourite — reads from the full array so it updates on add/remove instantly
   const isCurrentFav = selectedCity

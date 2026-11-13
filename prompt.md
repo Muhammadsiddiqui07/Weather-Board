@@ -162,19 +162,7 @@ _Add one line._
 
 ---
 
-## Prompt 12: Responsive design
-
-**Written by:** me
-
-**Prompt:**
-> Make the app responsive at 375px, 768px and 1280px, with touch targets of at least 44x44px on mobile.
-
-**Result / what I changed:**
-_Add one line._
-
----
-
-## Prompt 13: Daily weather reminder (push / notifications)
+## Prompt 12: Daily weather reminder (push / notifications)
 
 **Written by:** drafted with Claude, run by me
 

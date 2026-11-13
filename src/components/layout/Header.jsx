@@ -2,9 +2,9 @@
  * Header component with branding, live status, and unit switcher.
  */
 
-import React from 'react';
 import { CloudLightning } from 'lucide-react';
 import { useSettingsStore } from '../../store/settingsStore';
+import { ReminderSettings } from './ReminderSettings';
 
 export function Header() {
   const { unit, toggleUnit } = useSettingsStore();
@@ -27,6 +27,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-3">
+          <ReminderSettings />
           <button
             type="button"
             onClick={toggleUnit}
